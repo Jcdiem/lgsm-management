@@ -20,7 +20,7 @@ contextBridge.exposeInMainWorld(
   "api", {
       send: (channel, data) => {
           // whitelist channels
-          let validChannels = ["async-msg"];
+          let validChannels = ['async-msg','ssh-connect'];
           if (validChannels.includes(channel)) {
               ipcRenderer.send(channel, data);
           }

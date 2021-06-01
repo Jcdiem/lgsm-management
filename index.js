@@ -26,7 +26,9 @@ const {Client } = require('ssh2');
 
     conn.on('ready', () =>{
         console.debug('SSH connection established, attempting test command.');
-        if(sshCmd(conn,'whoami') != null) goodConnect = true;
+        testInfo = sshSimpleCmd(conn,'whoami');
+        console.log(testInfo);
+        if(testInfo != null) goodConnect = true;
     });
 
     if(goodConnect) return conn;
@@ -42,7 +44,7 @@ const {Client } = require('ssh2');
  * @param {String} cmd The command to be run on the server
  * @returns {object} STDOUT and STDERR in strings
  */
-function sshCmd(conn,cmd){
+function sshSimpleCmd(conn,cmd){
     cmdOutput = {err: "", out: ""};
     conn.exec(cmd, (err, stream) => {            
         if (err) throw err;
@@ -52,11 +54,12 @@ function sshCmd(conn,cmd){
             conn.end();                
         }).on('data', (stdout) =>{ //Get the STDOUT
             cmdOutput.out = stdout;
+            console.log(cmdOutput);
         }).stderr.on('data', (stderr) =>{ //Get the STDERR
             cmdOutput.err = stderr;
+            console.log(cmdOutput);
         });
-    });
-    return cmdOutput;
+    });    
 }
 
 
@@ -78,9 +81,16 @@ app.whenReady().then(() => {
     });
     //win.loadfile('main menu');
     win.loadFile('UI/testScreen.html');
-    ipcMain.on('async-msg', (event, arg) => {
+
+    //Setup runtime globals
+    let conn = new Client();
+
+    ipcMain.on('ssh-connect', (event, arg) => {
         console.log(arg);
-        event.sender.send('async-reply','Message from main');
+        conn = createSSH(arg.privkey,arg.user,arg.host,arg.port)
+        if (conn != null) event.sender.send('async-reply','Connection succesfull!');
+        else event.sender.send('async-reply','error in ssh configuration');
+        
     });
 
 })
