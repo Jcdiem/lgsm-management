@@ -1,0 +1,26 @@
+{
+  "name": "lgsm-gui",
+  "version": "0.0.1",
+  "description": "Management interface for Linux GSM toolkit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jcdiem/lgsm-management.git"
+  },
+  "keywords": [
+    "lgsm"
+  ],
+  "author": "Jcdiem",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Jcdiem/lgsm-management/issues"
+  },
+  "homepage": "https://github.com/Jcdiem/lgsm-management#readme",
+  "devDependencies": {
+    "electron": "^13.0.1"
+  }
+}
