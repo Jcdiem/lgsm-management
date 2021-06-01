@@ -1,2 +1,2 @@
 # lgsm-management
-Multi-Platform game server management using .NET core and the LinuxGSM project
+Application for managing game servers on Linux distributions using the Linxu GSM tools
