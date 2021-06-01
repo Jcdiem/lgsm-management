@@ -1,6 +1,6 @@
 //Global Space
 const path = require('path')
-const {app, BrowserWindow } = require('electron')
+const {app, BrowserWindow, ipcMain } = require('electron')
 const {readFileSync } = require('fs');
 const {Client } = require('ssh2');
 
@@ -65,8 +65,22 @@ app.whenReady().then(() => {
     //Runtime
 
     //Create window and load main menu
-    win = new BrowserWindow({width:800,height:600,title:'Linux GSM Manager',titleBarStyle:'hidden'});
+    win = new BrowserWindow({
+        width:800,
+        height:600,
+        title:'Linux GSM Manager',
+        titleBarStyle:'hidden',
+        webPreferences:{
+            preload: path.join(__dirname, 'UI/preload/testScreen.js'),
+            contextIsolation: true,
+            enableRemoteModule: false
+        }
+    });
     //win.loadfile('main menu');
-    win.loadFile('UI/html/testScreen.html');
+    win.loadFile('UI/testScreen.html');
+    ipcMain.on('async-msg', (event, arg) => {
+        console.log(arg);
+        event.sender.send('async-reply','Message from main');
+    });
 
 })

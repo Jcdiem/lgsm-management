@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
     <title>Hello World!</title>
+    <script src='renderer.js'></script>
   </head>
   <body>
     <div>
@@ -15,10 +16,8 @@
       and Electron <span id="electron-version"></span>.
     </div>
     <div>
-      <form>
-
-      </form>
-      <button id='testConnection'>Test</button>
+      <button id="sendSyncBtn">Ping Main Process</button>
+      <p id="asyncReply">Reply Will Show Here</p>
     </div>
 
   </body>
