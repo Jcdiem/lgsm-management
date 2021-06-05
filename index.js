@@ -3,63 +3,45 @@ const path = require('path')
 const {app, BrowserWindow, ipcMain } = require('electron')
 const {readFileSync } = require('fs');
 const {Client } = require('ssh2');
+const { resolve } = require('path');
 
 /**
-     * Create an OpenSSH client connection to the server
-     * @param {String} priv The path of the private key of the user
-     * @param {String} user The user to connect as
-     * @param {String} host The host running an OpenSSH server
-     * @param {number} port Port number to connect to the server on
-     * @returns {Client} An open SSH connection to the server
-     */
- function createSSH(priv,user,host,port){
-    conn = new Client();
-    conn.connect({
-        host: host,
-        port: port,
-        username: user,
-        privateKey: readFileSync(priv)
-    });
-
-    //Assume connection is bad
-    goodConnect = false;
-
-    conn.on('ready', () =>{
-        console.debug('SSH connection established, attempting test command.');
-        testInfo = sshSimpleCmd(conn,'whoami');
-        console.log(testInfo);
-        if(testInfo != null) goodConnect = true;
-    });
-
-    if(goodConnect) return conn;
-    else {
-        console.error('SSH connection failed!');
-        return null;
-    }
-}
-
-/**
- * Run a command in a server connected via SSH
- * @param {Client} conn The SSH connection to use
+ * Run asynchronys command in a server connected via SSH
+ * @param {Object} connDetails {host,port,username,privKey}
  * @param {String} cmd The command to be run on the server
- * @returns {object} STDOUT and STDERR in strings
+ * @returns {Promise} Promise with resolve of cmd output
  */
-function sshSimpleCmd(conn,cmd){
-    cmdOutput = {err: "", out: ""};
-    conn.exec(cmd, (err, stream) => {            
-        if (err) throw err;
-        //Once done receiving data
-        stream.on('close', (code, signal) => {
-            console.debug('Stream :: close :: code: ' + code + ', signal: ' + signal);
-            conn.end();                
-        }).on('data', (stdout) =>{ //Get the STDOUT
-            cmdOutput.out = stdout;
-            console.log(cmdOutput);
-        }).stderr.on('data', (stderr) =>{ //Get the STDERR
-            cmdOutput.err = stderr;
-            console.log(cmdOutput);
-        });
-    });    
+function asyncSshSimpleCmd(connDetails,cmd){
+    if (cmd == null) console.error("asyncSshSimpleCmd Missing command to send");
+    return new Promise(function(resolve, reject){
+            cmdOutput = "";
+            const conn = new Client();
+            conn.on('ready', () => {
+                //Client ready
+                conn.exec(cmd, (err, stream) => {            
+                    if (err) reject(err);
+                    stream.on('close', (code, signal) => { //Command finished
+                        console.debug('Stream :: close :: code: ' + code + ', signal: ' + signal);
+                        conn.end();
+                    }).on('data', (stdout) =>{ //Get the STDOUT
+                        cmdOutput = stdout;
+                        console.log(cmdOutput);
+                        resolve(cmdOutput)
+                        //Testing
+                    }).stderr.on('data', (stderr) =>{ //Get the STDERR
+                        cmdOutput = stderr;
+                        console.log(cmdOutput);
+                        resolve(cmdOutput);
+                    });
+                }); 
+            }).connect({
+                host: connDetails.host,
+                port: connDetails.port,
+                username: connDetails.username,
+                privateKey: readFileSync(connDetails.privKey)
+            })
+                       
+    });
 }
 
 
@@ -82,15 +64,17 @@ app.whenReady().then(() => {
     //win.loadfile('main menu');
     win.loadFile('UI/testScreen.html');
 
-    //Setup runtime globals
-    let conn = new Client();
-
     ipcMain.on('ssh-connect', (event, arg) => {
         console.log(arg);
-        conn = createSSH(arg.privkey,arg.user,arg.host,arg.port)
-        if (conn != null) event.sender.send('async-reply','Connection succesfull!');
-        else event.sender.send('async-reply','error in ssh configuration');
-        
+        cmdPromise = asyncSshSimpleCmd(arg,'whoami');
+        event.sender.send('async-reply','Working on it....');
+        cmdPromise.then(function(result){
+            console.debug('result connect: ' + result);
+            event.sender.send('async-reply','Server replied: ' + result);
+        }), function(err){
+            event.sender.send('async-reply','error in ssh configuration <br> ' + err);
+            console.debug(err);
+        }        
     });
 
 })
