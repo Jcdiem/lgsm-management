@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia;
+using System;
 
 namespace lgsm_mngr {
     class Program {
@@ -9,6 +10,14 @@ namespace lgsm_mngr {
             ConnectionManager conMngr = new ConnectionManager(cfg.parseFile("ConnectionDetails.txt"));
 
             conMngr.connectSSH();
+
+            //UI Testing
+
+            //Build the UI application
+            AppBuilder.Configure<GUI>()
+                .UsePlatformDetect()
+                .LogToTrace()
+                .StartWithClassicDesktopLifetime(args);
         }
     }
 
