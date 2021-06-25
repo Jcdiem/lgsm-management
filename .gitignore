@@ -352,3 +352,7 @@ MigrationBackup/
 package-lock.json
 
 user-data/
+
+venv/
+
+.idea/
