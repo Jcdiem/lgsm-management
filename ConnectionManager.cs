@@ -8,13 +8,8 @@ namespace lgsm_mngr
         SftpClient sfClient; //SFTP Client
         ConnectionInfo conInfo; //Protocol agnostic connection details
 
-        public ConnectionManager(string host, string username, int port, string privKeyFile) {
-            ConnectionInfo conInfo = new ConnectionInfo(
-                host,
-                port,
-                username,
-                new PrivateKeyAuthenticationMethod("user-data/"+privKeyFile)
-                );
+        public ConnectionManager(ConnectionInfo connectionDetails) {
+            conInfo = connectionDetails;
         }
 
         public void connectSSH() {
