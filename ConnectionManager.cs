@@ -15,6 +15,7 @@ namespace lgsm_mngr
         public void connectSSH() {
             using (shClient = new SshClient(conInfo)) {
                 shClient.Connect();
+                Console.WriteLine("Connected!");
             }
         }
     }

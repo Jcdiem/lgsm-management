@@ -28,15 +28,22 @@ namespace lgsm_mngr {
 //                    Console.WriteLine("Value: " + cfg[i]);
                 }
 
-                //Create the connection info using the values
-                configDetails = new ConnectionInfo(
-                    cfg[(int)ConfigValues.HOST],
-                    Convert.ToInt32(cfg[(int)ConfigValues.PORT]),
-                    cfg[(int)ConfigValues.USER],                    
-                    new PrivateKeyAuthenticationMethod(sensitiveFolder + cfg[(int)ConfigValues.KEY])
-                );
-                //TODO: switch to standardized config               
-                return configDetails;
+                //Error check for bad privkey
+                if (System.IO.File.Exists(sensitiveFolder + cfg[(int)ConfigValues.KEY])) {
+
+                    //Create the connection info using the values
+                    configDetails = new ConnectionInfo(
+                        cfg[(int)ConfigValues.HOST], //IP-address or Hostname
+                        Convert.ToInt32(cfg[(int)ConfigValues.PORT]), //Port
+                        cfg[(int)ConfigValues.USER], //Username
+                        //Last one is private key
+                        new PrivateKeyAuthenticationMethod(cfg[(int)ConfigValues.USER], new PrivateKeyFile(sensitiveFolder + cfg[(int)ConfigValues.KEY]))
+                    );
+                    //TODO: switch to standardized config               
+                    return configDetails;
+                }
+                throw new UriFormatException("Could not find private key");
+                
 
             }
             throw new Exception("Config file not found");           
