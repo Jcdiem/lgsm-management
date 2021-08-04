@@ -358,3 +358,9 @@ venv/
 .idea/
 
 lgsm-mngr.sln
+
+.vscode/
+
+_Imports.razor
+
+*.razor
