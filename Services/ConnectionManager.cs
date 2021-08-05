@@ -9,12 +9,14 @@ namespace lgsm_mngr.Services
         ConnectionInfo conInfo; //Protocol agnostic connection details
 
     //TODO: Make config file dynamic and shared between services
-        private String configFile = "user=data/config.ini";
+        public String configFile {get; private set;}
 
         public bool isRunning {get; private set;}
 
         public ConnectionManager(){
+            configFile = "user-data/config.ini";
             isRunning = false;
+            reloadConfig();
         }
 
         public void startService(){
@@ -24,7 +26,7 @@ namespace lgsm_mngr.Services
             }
             catch(Exception e){
                 isRunning = false;
-                Console.WriteLine("ERROR: Config not loading!");
+                Console.WriteLine("ERROR: SSH connection failed!");
                 Console.WriteLine("Exception: " + e.Message);
                 //TODO: Signal an error to program
             }

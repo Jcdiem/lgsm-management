@@ -44,8 +44,8 @@ namespace lgsm_mngr.Services {
                 );
                 return new ConnectionInfo(
                     rawData["Connection"]["Host"],
-                    rawData["Connection"]["Port"],
-                    privKeyAuth
+                    rawData["Connection"]["User"],
+                    privKeyAuth                    
                 );
             }
             throw new Exception("Config file not found");   

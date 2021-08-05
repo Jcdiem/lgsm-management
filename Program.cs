@@ -13,7 +13,8 @@ namespace lgsm_mngr
     public class Program
     {
         public static void Main(string[] args){
-            Services.ConfigManager.getConDetails("user-data/config.ini");
+            ConnectionManager conMan = new ConnectionManager();
+            conMan.startService();
 
             // //Start services            
 
