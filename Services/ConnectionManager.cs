@@ -54,7 +54,7 @@ namespace lgsm_mngr.Services
         }
 
         //Returns message
-        public String sendShellCommandAsync(String cmd) {
+        public String sendShellCommand(String cmd) {
             String cmdText = cmd;
             if(isRunning){
                 Console.WriteLine("DEBUG: Sending ssh command  \'" + cmdText + "\'");

@@ -25,7 +25,7 @@ namespace lgsm_mngr.tui
                         break;
                     case 2: //Run Test Command
                         if(!srvc.connectionManager.isRunning) srvc.connectionManager.startService();
-                        srvc.connectionManager.sendShellCommandAsync("whoami");
+                        srvc.connectionManager.sendShellCommand("whoami");
                         pauseConsole();
                         break;
                     case 3: //View Server Info
