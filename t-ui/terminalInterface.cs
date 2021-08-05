@@ -5,8 +5,9 @@ namespace lgsm_mngr.tui
 {
     class TerminalInterface
     {
-        public void startUI()
-        {
+        public static void startUI(ServiceManager srvc)
+        {            
+            ServiceManager serviceManger = srvc;
             bool isRunning = true;
             while (isRunning)
             {
@@ -19,10 +20,13 @@ namespace lgsm_mngr.tui
                 "LGSM Manager Debug Menu"))
                 {
                     case 1: //Read Config
-
+                        Services.ConfigManager.getConDetails(srvc.configLocation);
+                        pauseConsole();
                         break;
                     case 2: //Run Test Command
-                        
+                        if(!srvc.connectionManager.isRunning) srvc.connectionManager.startService();
+                        srvc.connectionManager.sendShellCommandAsync("whoami");
+                        pauseConsole();
                         break;
                     case 3: //View Server Info
                         Console.WriteLine("Not yet implemented!");

@@ -42,16 +42,27 @@ namespace lgsm_mngr.Services
 
         public void connectSSH() {
             if (conInfo != null){
-                using (shClient = new SshClient(conInfo)) {
-                    shClient.Connect();                    
-                    if(shClient.IsConnected) Console.WriteLine("DEBUG: SSH connection established!");                    
-                    else {                    
-                        Console.WriteLine("ERROR: SSH Connection not established!");
-                        throw new Exception("SSH Connection failed");
-                    }
-                }
+                shClient = new SshClient(conInfo);
+                shClient.Connect();                    
+                if(shClient.IsConnected) Console.WriteLine("DEBUG: SSH connection established!");                    
+                else {                    
+                    Console.WriteLine("ERROR: SSH Connection not established!");
+                    throw new Exception("SSH Connection failed");
+                }                
             }
             else throw new Exception("No connection info!");            
+        }
+
+        //Returns message
+        public String sendShellCommandAsync(String cmd) {
+            String cmdText = cmd;
+            if(isRunning){
+                Console.WriteLine("DEBUG: Sending ssh command  \'" + cmdText + "\'");
+                SshCommand command = shClient.RunCommand(cmdText);
+                Console.WriteLine("Result: "+ command.Result);
+                return "";                
+            }
+            else throw new Exception("SSH command sent without running connection");
         }
 
         private void reloadConfig(){
