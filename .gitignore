@@ -358,3 +358,6 @@ venv/
 .idea/
 
 lgsm-mngr.sln
+
+.vscode/
+

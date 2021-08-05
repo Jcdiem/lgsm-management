@@ -1,24 +1,16 @@
-﻿using Avalonia;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-namespace lgsm_mngr {
-    class Program {
-        static void Main(string[] args) {
-            Console.WriteLine("Loading...");
-
-            ConfigManager cfg = new ConfigManager();
-            ConnectionManager conMngr = new ConnectionManager(cfg.parseFile("ConnectionDetails.txt"));
-
-            conMngr.connectSSH();
-
-            //UI Testing
-
-            //Build the UI application
-            AppBuilder.Configure<GUI>()
-                .UsePlatformDetect()
-                .LogToTrace()
-                .StartWithClassicDesktopLifetime(args);
-        }
+namespace lgsm_mngr
+{
+    public class Program
+    {
+        tui.TerminalInterface term = new tui.TerminalInterface();
     }
-
 }
