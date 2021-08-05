@@ -19,8 +19,8 @@ namespace lgsm_mngr.Services {
         private static IniData readIni(string fileName) {
             FileIniDataParser parser = new FileIniDataParser();
             if (System.IO.File.Exists(fileName)) {
-                IniData rawData = parser.ReadFile(fileName);                
-                System.Console.WriteLine("DEBUG: Config file read from INI to below \n" + rawData);                                
+                IniData rawData = parser.ReadFile(fileName);
+                System.Console.WriteLine("DEBUG: Config file read from INI to below \n" + rawData);
                 return rawData;
             }
             else throw new Exception("Config file not found");            
@@ -39,7 +39,7 @@ namespace lgsm_mngr.Services {
             if (System.IO.File.Exists(fileName)) {
                 IniData rawData = readIni(fileName);
                 PrivateKeyAuthenticationMethod privKeyAuth = new PrivateKeyAuthenticationMethod(
-                    rawData["Connection"]["Username"], 
+                    rawData["Connection"]["User"], 
                     new PrivateKeyFile(sensitiveFolder + rawData["Connection"]["Key"])
                 );
                 return new ConnectionInfo(
