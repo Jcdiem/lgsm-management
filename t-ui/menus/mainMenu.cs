@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using lgsm_mngr.tui;
+using lgsm_mngr.Services;
 
 namespace lgsm_mngr.tui.menus{
     class MainMenu : IMenu {
@@ -27,7 +27,7 @@ namespace lgsm_mngr.tui.menus{
                 //Main menu
                 switch (TerminalInterface.queryUser(choiceList,menuTitle)){
                     case 1: //Read Config
-                        configManager.parseFile("user-data/config.ini");
+                        configManager.readToStringList("user-data/config.ini");
                         break;
                     case 2: //Run Test Command
                         con.connectSSH();
