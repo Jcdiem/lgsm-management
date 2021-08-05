@@ -6,11 +6,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using lgsm_mngr.Services;
 
 namespace lgsm_mngr
 {
     public class Program
     {
-        tui.TerminalInterface term = new tui.TerminalInterface();
+        public static void Main(string[] args){
+            Services.ConfigManager.getConDetails("user-data/config.ini");
+
+            // //Start services            
+
+            // tui.TerminalInterface term = new tui.TerminalInterface();
+            // term.startUI();
+        }        
     }
 }
