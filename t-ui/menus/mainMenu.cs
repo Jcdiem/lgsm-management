@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using lgsm_mngr.Services;
 
 namespace lgsm_mngr.tui.menus{
     class MainMenu : IMenu {
 
-        public MainMenu(ConnectionManager connectionManager){
+        public MainMenu(Services.ConnectionManager connectionManager){
             menuTitle = "LGSM Manager Debug Menu";
             choiceList = new List<String>{
                 "Read Config",
@@ -13,10 +12,8 @@ namespace lgsm_mngr.tui.menus{
                 "View Server Info (Not yet implemented)",
                 "Quit"};
             con = connectionManager;
-            configManager = new ConfigManager();
         }
-        ConnectionManager con;
-        ConfigManager configManager;
+        Services.ConnectionManager con;
         public String menuTitle {get;}
         public List<String> choiceList {get;}
 
@@ -27,7 +24,7 @@ namespace lgsm_mngr.tui.menus{
                 //Main menu
                 switch (TerminalInterface.queryUser(choiceList,menuTitle)){
                     case 1: //Read Config
-                        configManager.readToStringList("user-data/config.ini");
+                        Utils.ConfigManager.readToStringList("user-data/config.ini");
                         break;
                     case 2: //Run Test Command
                         con.connectSSH();

@@ -20,7 +20,7 @@ namespace lgsm_mngr.tui
                 "LGSM Manager Debug Menu"))
                 {
                     case 1: //Read Config
-                        Services.ConfigManager.getConDetails(srvc.configLocation);
+                        Utils.ConfigManager.getConDetails(srvc.configLocation);
                         pauseConsole();
                         break;
                     case 2: //Run Test Command

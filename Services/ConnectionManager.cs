@@ -65,8 +65,16 @@ namespace lgsm_mngr.Services
             else throw new Exception("SSH command sent without running connection");
         }
 
+        public async void runAsyncCommand(String cmd){
+            Console.WriteLine("DEBUG: Creating ssh command: " + cmd + "\n");
+            SshCommand shCmd = shClient.CreateCommand(cmd);            
+            Console.WriteLine("DEBUG: SSH command created, running...");
+            shCmd.BeginExecute();
+            while(shCmd.ExitStatus)
+        }
+
         private void reloadConfig(){
-            conInfo = Services.ConfigManager.getConDetails(configFile);
+            conInfo = Utils.ConfigManager.getConDetails(configFile);
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using IniParser;
 using IniParser.Model;
 
-namespace lgsm_mngr.Services {
+namespace lgsm_mngr.Utils {
     class ConfigManager {        
         
         private enum ConfigValues : int {
@@ -27,7 +27,7 @@ namespace lgsm_mngr.Services {
         }
 
         //TODO: Import to printable format
-        public List<String> readToStringList(String file){
+        public static List<String> readToStringList(String file){
             return new List<String>();
         }
 
